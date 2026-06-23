@@ -25,13 +25,9 @@ endif()
 option(USE_HIP "Build with HIP for AMD GPUs" OFF)
 
 if(USE_HIP)
+    # enable_language(HIP) honors -DCMAKE_HIP_ARCHITECTURES, else auto-detects the
+    # host GPU, else errors on a no-GPU host.
     enable_language(HIP)
-
-    # Default to gfx90a if no architecture was specified; override with
-    # -DCMAKE_HIP_ARCHITECTURES (e.g. gfx1100 for RDNA3, gfx1201 for RDNA4).
-    if(NOT DEFINED CMAKE_HIP_ARCHITECTURES OR CMAKE_HIP_ARCHITECTURES STREQUAL "")
-        set(CMAKE_HIP_ARCHITECTURES "gfx90a")
-    endif()
 
     # rocThrust is a drop-in for CUDA Thrust
     find_package(rocthrust REQUIRED)
